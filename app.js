@@ -28,6 +28,15 @@ const MAPBOX_API = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?acce
 }).addTo(map);
 
 
+const initialCoordinates = [40.4169473, -3.7057172]; // Plaza Sol en Madrid [lat, lng]
+
+// Añadimos el marcador a nuestra posición inicial
+L.marker(initialCoordinates).addTo(map);
+ // Ejemplo añadiendo otras coordenadas:
+
+const plazaMayorCoordinates = [34.028523673475156, -118.23009823662461]
+L.marker(plazaMayorCoordinates).addTo(map);
+
 
 /* 
 
