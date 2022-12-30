@@ -28,42 +28,48 @@ const MAPBOX_API = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?acce
 }).addTo(map);
 
 
+const KoreaTown = [34.06223287851624, -118.2968521728518]; //koreaTown
+
 const initialCoordinates = [40.4169473, -3.7057172]; // Plaza Sol en Madrid [lat, lng]
 
 // Añadimos el marcador a nuestra posición inicial
 L.marker(initialCoordinates).addTo(map);
  // Ejemplo añadiendo otras coordenadas:
 
-const plazaMayorCoordinates = [34.028523673475156, -118.23009823662461]
+const plazaMayorCoordinates = [34.028523673475156, -118.23009823662461] //
 L.marker(plazaMayorCoordinates).addTo(map);
 
+// Añadir un popUp
+// Añadimos el marcador a nuestra posición inicial
+L.marker(initialCoordinates).bindPopup("<b>Plaza Sol</b><br>Posición inicial del mapa").addTo(map);
+// Ejemplo añadiendo otras coordenadas:
+L.marker(plazaMayorCoordinates).bindPopup("<b>Autovia</b><br>Posición adicional").addTo(map);// linea 37 de codigo
 
-/* 
-
-
-
-
-var circle = L.circle([34.06223287851624, -118.2968521728518], {
-    color: 'red',
-    fillColor: '#f03',
-    fillOpacity: 0.5,
-    radius: 100
-}).addTo(map);
-
-var polygon = L.polygon([
-    [38.273313683659296, -0.5411484349322833],
-    [38.27315159046672, -0.5394966683113034],
-    [38.272487004594424, -0.5398270216354993],
-    [38.27282740299612, -0.5406735520287516],
-    [38.27250321407831, -0.5397650803872126]
-]).addTo(map);
-
-marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
-circle.bindPopup("I am a circle.");
-polygon.bindPopup("I am a polygon."); */
+L.marker(KoreaTown).bindPopup("<b>KoreaTown</b><br>ser'a esta??").addTo(map);
 
 
+//1. Utiliza Leaflet para posicionarte en un mapa
+//Habrá que utilizar navigator.geolocation.getCurrentPosition(...)
+var x = document.getElementById("demo");
 
+function getLocation() {
+  if (navigator.geolocation) {
+    const obtenerLocalizacionActual = navigator.geolocation.getCurrentPosition(showPosition);
+
+    
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function showPosition(position) {
+  x.innerHTML = "Latitude: " + position.coords.latitude + 
+  "<br>Longitude: " + position.coords.longitude;
+
+  let marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
+  marker.bindPopup(`Tu estás actualmente en  ${position.coords.latitude}, ${position.coords.longitude}`);
+
+}
 
 
 // 2. Posicionar el transporte público (trenes y autobuses) de Los Angeles en el mapa. 🎉 🚌 🚊
@@ -72,27 +78,26 @@ polygon.bindPopup("I am a polygon."); */
 // Fetch de la posición de los vehículos en tiempo real
 
 //navigator.geolocation.getCurrentPosition(...)
-/* 
+
+
+
+// Habrá que utilizar navigator.geolocation.getCurrentPosition(...)
+
+ const mapTrenes = L.map('mapTrenes').setView([34.06223287851624, -118.2968521728518], 13);
+
+const mapBuses = L.map('mapBuses').setView([34.06223287851624, -118.2968521728518], 13);
+
 async function trenesInfo(){
-const resultado = await fetch(`https://api.metro.net/LACMTA_Rail/vehicle_positions/all?geojson=false`);
-const datosTrenes = await resultado.json();
-console.log(datosTrenes);
-const tren = [];
-
-for (let i = 0; i < datosTrenes.length; i++) {
-    tren.push(datosTrenes[i].geometry.coordinates);
-}
-
-const mapTrenes = document.querySelector('#mapTrenes');
-const mostrar = mapTrenes.innerHTML;
-
-
-
-console.log(tren)
+  const resultado = await fetch(`https://api.metro.net/LACMTA_Rail/vehicle_positions/all?geojson=false`);
+  const datosTrenes = await resultado.json();
+  console.log(datosTrenes);
+  const tren = [];
+  for (let i = 0; i < datosTrenes.length; i++) {
+    let marker = L.marker([tren.position.latitude, tren.position.longitude]).addTo(mapTrenes);
+      tren.push(datosTrenes[i].geometry.coordinates);
+      L.marker(tren).addTo(mapTrenes)
+      tren.push(marker)
+  }}
 
 
 
-}
-trenesInfo() 
- */
-// Después de hacer fetch(), tratar el objeto para poder pintar los puntos con Leafelt
